@@ -1,10 +1,63 @@
-saldo = 1000  # saldo inicial
-opcion = 0
-print("💰 Bienvenido a tu Cajero Automático")
-while opcion != 4:
+def mostrar_menu():
     print("\n--- MENÚ ---")
     print("1. Consultar saldo")
     print("2. Depositar dinero")
     print("3. Retirar dinero")
     print("4. Salir")
-    opcion = int(input("Selecciona una opción: "))
+
+
+def solicitar_monto(mensaje):
+    while True:
+        try:
+            monto = float(input(mensaje))
+            if monto <= 0:
+                print("❌ El monto debe ser mayor que cero.")
+            else:
+                return monto
+        except ValueError:
+            print("❌ Ingresa un valor numérico válido.")
+
+
+def cajero():
+    saldo = 1000.0
+    print("💰 Bienvenido a tu Cajero Automático")
+    
+    while True:
+        mostrar_menu()
+
+        try:
+            opcion = int(input("Selecciona una opción: "))
+        except ValueError:
+            print("❌ Debes ingresar un número del 1 al 4.")
+            continue
+
+        match opcion:
+            case 1:
+                print(f"💳 Tu saldo actual es: ${saldo:.2f}")
+
+            case 2:
+                monto = solicitar_monto("Ingrese el monto a depositar: ")
+                saldo += monto
+                print(f"✔ Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
+
+            case 3:
+                monto = solicitar_monto("Ingrese el monto a retirar: ")
+                if monto > saldo:
+                    print("❌ Saldo insuficiente para realizar esta operación.")
+                else:
+                    saldo -= monto
+                    print(f"✔ Retiro exitoso. Nuevo saldo: ${saldo:.2f}")
+
+            case 4:
+                print("👋 Gracias por usar el cajero. ¡Hasta luego!")
+                break
+
+            case _:
+                print("❌ Opción inválida. Intente nuevamente.")
+
+if __name__ == "__main__":
+    cajero()
+
+        
+
+
