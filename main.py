@@ -20,7 +20,30 @@ def solicitar_monto(mensaje):
 
 def cajero():
     saldo = 1000.0
+    pin_correcto = 1234
+    intentos = 3
+    
     print("💰 Bienvenido a tu Cajero Automático")
+    
+    while intentos > 0:
+        try:
+            pin_ingresado = int(input("Ingrese su código PIN: "))
+        except ValueError:
+            intentos -= 1
+            print(f"❌ Solo se permiten números. Te quedan {intentos} intentos.")
+            if intentos == 0:
+                print("🔒 Tarjeta bloqueada por seguridad.")
+                return
+            continue
+
+        if pin_ingresado != pin_correcto:
+            intentos -= 1
+            print(f"❌ PIN incorrecto. Te quedan {intentos} intentos.")
+            if intentos == 0:
+                print("🔒 Tarjeta bloqueada por seguridad.")
+                return
+        else:
+            break
     
     while True:
         mostrar_menu()
@@ -57,7 +80,3 @@ def cajero():
 
 if __name__ == "__main__":
     cajero()
-
-        
-
-
