@@ -18,6 +18,27 @@ def solicitar_monto(mensaje):
             print("❌ Ingresa un valor numérico válido.")
 
 
+# ----------------------------------------
+# FUNCIÓN AGREGADA POR CRISTIAN (TU OPCIÓN 2)
+# ----------------------------------------
+def depositar_dinero(saldo):
+    """Función creada por Cristian para manejar la opción 2: depósito de dinero."""
+    try:
+        monto = float(input("Ingrese el monto a depositar: "))
+    except ValueError:
+        print("❌ Debes ingresar un número válido.")
+        return saldo
+
+    if monto <= 0:
+        print("❌ El monto debe ser mayor que cero.")
+        return saldo
+
+    saldo += monto
+    print(f"✔ Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
+    return saldo
+# ----------------------------------------
+
+
 def cajero():
     saldo = 1000.0
     pin_correcto = 1234
@@ -59,9 +80,7 @@ def cajero():
                 print(f"💳 Tu saldo actual es: ${saldo:.2f}")
 
             case 2:
-                monto = solicitar_monto("Ingrese el monto a depositar: ")
-                saldo += monto
-                print(f"✔ Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
+                saldo = depositar_dinero(saldo)  # <--- AQUI VA TU APORTACIÓN
 
             case 3:
                 monto = solicitar_monto("Ingrese el monto a retirar: ")
@@ -77,6 +96,3 @@ def cajero():
 
             case _:
                 print("❌ Opción inválida. Intente nuevamente.")
-
-if __name__ == "__main__":
-    cajero()
