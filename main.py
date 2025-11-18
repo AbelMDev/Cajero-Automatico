@@ -7,6 +7,7 @@ def mostrar_menu():
 
 
 def solicitar_monto(mensaje):
+    """Solicita un monto válido mayor a cero."""
     while True:
         try:
             monto = float(input(mensaje))
@@ -19,10 +20,9 @@ def solicitar_monto(mensaje):
 
 
 # ----------------------------------------------------
-# FUNCIÓN ACTUALIZADA: REGISTRA DEPÓSITOS
+# DEPÓSITO DE DINERO
 # ----------------------------------------------------
 def depositar_dinero(saldo, movimientos):
-    """Función creada por Cristian para manejar la opción 2: depósito de dinero."""
     try:
         monto = float(input("Ingrese el monto a depositar: "))
     except ValueError:
@@ -34,45 +34,60 @@ def depositar_dinero(saldo, movimientos):
         return saldo
 
     saldo += monto
+    movimientos.append(monto)  # Registrar depósito
 
-    # 🔹 Registrar movimiento positivo (depósito)
-    movimientos.append(monto)
-
-    print(f"Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
+    print(f"✔ Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
     return saldo
+
+
 # ----------------------------------------------------
+# RETIRO DE DINERO
+# ----------------------------------------------------
+def retirar_dinero(saldo, movimientos):
+    monto = solicitar_monto("Ingrese el monto a retirar: ")
+
+    if monto > saldo:
+        print("❌ Saldo insuficiente para realizar esta operación.")
+        return saldo
+
+    saldo -= monto
+    movimientos.append(-monto)  # Registrar retiro como negativo
+
+    print(f"✔ Retiro exitoso. Nuevo saldo: ${saldo:.2f}")
+    return saldo
 
 
+# ----------------------------------------------------
+# CAJERO PRINCIPAL
+# ----------------------------------------------------
 def cajero():
     saldo = 1000.0
     pin_correcto = 1234
     intentos = 3
-
-    # 🔹 Lista para registrar movimientos de depósitos (+) y retiros (−)
     movimientos = []
 
     print("💰 Bienvenido a tu Cajero Automático")
     
+    # Validación de PIN
     while intentos > 0:
         try:
             pin_ingresado = int(input("Ingrese su código PIN: "))
         except ValueError:
             intentos -= 1
             print(f"❌ Solo se permiten números. Te quedan {intentos} intentos.")
-            if intentos == 0:
-                print("🔒 Tarjeta bloqueada por seguridad.")
-                return
             continue
 
         if pin_ingresado != pin_correcto:
             intentos -= 1
             print(f"❌ PIN incorrecto. Te quedan {intentos} intentos.")
-            if intentos == 0:
-                print("🔒 Tarjeta bloqueada por seguridad.")
-                return
         else:
             break
+
+        if intentos == 0:
+            print("🔒 Tarjeta bloqueada por seguridad.")
+            return
     
+    # Menú principal
     while True:
         mostrar_menu()
 
@@ -85,22 +100,13 @@ def cajero():
         match opcion:
             case 1:
                 print(f"💳 Tu saldo actual es: ${saldo:.2f}")
+                print(movimientos)
 
             case 2:
-                # 🔹 Llamada actualizada con lista de movimientos
                 saldo = depositar_dinero(saldo, movimientos)
 
             case 3:
-                monto = solicitar_monto("Ingrese el monto a retirar: ")
-                if monto > saldo:
-                    print("❌ Saldo insuficiente para realizar esta operación.")
-                else:
-                    saldo -= monto
-                    
-                    # Registrar retiro como número negativo
-                    movimientos.append(-monto)
-
-                    print(f"✔ Retiro exitoso. Nuevo saldo: ${saldo:.2f}")
+                saldo = retirar_dinero(saldo, movimientos)
 
             case 4:
                 print("👋 Gracias por usar el cajero. ¡Hasta luego!")
