@@ -30,7 +30,7 @@ def depositar_dinero(saldo):
         return saldo
 
     saldo += monto
-    print(f"✔ Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
+    print(f"Depósito exitoso. Nuevo saldo: ${saldo:.2f}")
     return saldo
 
 
